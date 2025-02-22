@@ -1,0 +1,15 @@
+<div class="videoContainer">
+  <div>
+    <video #video autoplay [hidden]="!isCameraAllowed"></video>
+  </div>
+  <div>
+    <canvas #canvas></canvas>
+  </div>
+</div>
+
+<app-primary-button
+  *ngIf="!isCameraAllowed"
+  label="Allow camera"
+  (btnClicked)="startCamera()"
+>
+</app-primary-button>

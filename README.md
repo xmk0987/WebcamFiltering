@@ -1,59 +1,49 @@
-# VideoFilter
+# Webcam Filter App
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.1.2.
+A simple Angular application that accesses your webcam and applies various filters to the live video feed.
 
-## Development server
+## Features
 
-To start a local development server, run:
+- **Webcam Access:** Requests access to your webcam and displays the live video feed.
+- **Dynamic Filters:** Apply different filters such as grayscale and ASCII art in real time.
+- **Pixelated Output:** Downscales the video for a pixelated effect, ideal for generating ASCII art.
+- **Live Preview:** See changes immediately as filters are applied to the video.
 
-```bash
-ng serve
-```
+## Getting Started
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+### Prerequisites
 
-## Code scaffolding
+- [Node.js](https://nodejs.org/) (v12 or higher)
+- [Angular CLI](https://angular.io/cli) (installed globally)
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+### Installation
 
-```bash
-ng generate component component-name
-```
+1. **Clone the Repository:**
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+   ```bash
+   git clone <repository-url>
+   cd <project-directory>
+   ```
 
-```bash
-ng generate --help
-```
+2. **Install Dependencies:**
 
-## Building
+   ```bash
+   npm install
+   ```
 
-To build the project run:
+### Running the Application
 
-```bash
-ng build
-```
+Start the development server with:
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+    ```bash
+    ng serve
+    ```
 
-## Running unit tests
+Open your browser and navigate to http://localhost:4200 to see the app in action.
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+### Usage
 
-```bash
-ng test
-```
+- **Grant Camera Access:** On startup, the app will request access to your webcam. Please allow access in your browser.
+- **Apply Filters:** Use the provided UI controls to switch between different filters (e.g., grayscale, ASCII art).
+- **View Results:** The live video feed will update in real time with the selected filter applied.
 
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.

@@ -1,0 +1,20 @@
+<div class="container">
+  <h1>Filters</h1>
+  <div class="buttons">
+    <app-primary-button
+      label="RESET"
+      (btnClicked)="filterService.changeFilter('')"
+    >
+    </app-primary-button>
+    <app-primary-button
+      label="Gray Scale"
+      (btnClicked)="filterService.changeFilter('gray')"
+    >
+    </app-primary-button>
+    <app-primary-button
+      label="ASCII"
+      (btnClicked)="filterService.changeFilter('ascii')"
+    >
+    </app-primary-button>
+  </div>
+</div>
