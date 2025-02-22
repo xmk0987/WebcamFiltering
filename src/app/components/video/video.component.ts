@@ -77,28 +77,28 @@ export class VideoComponent implements OnInit {
     ctx.drawImage(this.videoRef.nativeElement, 0, 0, width, height);
     const frame = ctx.getImageData(0, 0, width, height);
 
-    if (this.filterService.filterType() === 'gray') {
-      this.filterService.applyGrayScaleFilter(frame);
+    if (
+      this.filterService.filterType() !== 'particles' &&
+      this.filterService.isAnimating
+    ) {
+      this.filterService.stopParticlesAnimation(ctx);
     }
 
     switch (this.filterService.filterType()) {
       case 'gray':
-        this.filterService.applyGrayScaleFilter(frame);
-        ctx.putImageData(frame, 0, 0);
+        this.filterService.applyGrayScaleFilter(frame, ctx);
+        break;
+      case 'warm':
+        this.filterService.applyWarmFilter(frame, ctx);
+        break;
+      case 'cool':
+        this.filterService.applyCoolFilter(frame, ctx);
         break;
       case 'ascii':
-        const asciiArt = this.filterService.applyAsciiFilter(frame);
-        ctx.clearRect(0, 0, width, height);
-
-        ctx.fillStyle = 'black';
-        ctx.fillRect(0, 0, width, height);
-
-        ctx.font = `1.7px monospace`;
-        ctx.fillStyle = 'white';
-        const lines = asciiArt.split('\n');
-        for (let i = 0; i < lines.length; i++) {
-          ctx.fillText(lines[i], 0, i);
-        }
+        this.filterService.applyAsciiFilter(frame, ctx);
+        break;
+      case 'particles':
+        this.filterService.startParticlesAnimation(frame, ctx);
         break;
       default:
         ctx.putImageData(frame, 0, 0);

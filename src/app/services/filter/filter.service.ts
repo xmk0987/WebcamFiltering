@@ -1,12 +1,19 @@
 import { Injectable, signal } from '@angular/core';
+import { Particle } from '../../models/Particle.model';
 
-export type FilterType = 'gray' | 'ascii' | '';
+export type FilterType = 'gray' | 'ascii' | 'warm' | 'cool' | 'particles' | '';
 
+const WARM_COOL_ADJUSTMENT = 20;
 @Injectable({
   providedIn: 'root',
 })
 export class FilterService {
   filterType = signal<FilterType>('');
+
+  private animationId: number | null = null;
+  isAnimating: boolean = false;
+  numberOfParticles: number = 3000;
+  particlesArray: Particle[] = [];
 
   constructor() {}
 
@@ -15,7 +22,7 @@ export class FilterService {
     this.filterType.set(filter);
   }
 
-  applyGrayScaleFilter(frame: ImageData) {
+  applyGrayScaleFilter(frame: ImageData, ctx: CanvasRenderingContext2D) {
     const data = frame.data;
 
     for (let i = 0; i < data.length; i += 4) {
@@ -30,10 +37,34 @@ export class FilterService {
       data[i + 2] = gray;
     }
 
-    return frame;
+    ctx.putImageData(frame, 0, 0);
   }
 
-  applyAsciiFilter(frame: ImageData) {
+  applyWarmFilter(frame: ImageData, ctx: CanvasRenderingContext2D) {
+    const data = frame.data;
+    const adjustment = WARM_COOL_ADJUSTMENT;
+
+    for (let i = 0; i < data.length; i += 4) {
+      data[i] += adjustment;
+      data[i + 2] -= adjustment;
+    }
+
+    ctx.putImageData(frame, 0, 0);
+  }
+
+  applyCoolFilter(frame: ImageData, ctx: CanvasRenderingContext2D) {
+    const data = frame.data;
+    const adjustment = WARM_COOL_ADJUSTMENT;
+
+    for (let i = 0; i < data.length; i += 4) {
+      data[i] -= adjustment;
+      data[i + 2] += adjustment;
+    }
+
+    ctx.putImageData(frame, 0, 0);
+  }
+
+  applyAsciiFilter(frame: ImageData, ctx: CanvasRenderingContext2D) {
     const density = 'Ñ@#W$9876543210?!abc;:+=-,._ ';
     const data = frame.data;
     const w = frame.width;
@@ -56,6 +87,68 @@ export class FilterService {
       asciiArt += row + '\n';
     }
 
-    return asciiArt;
+    ctx.clearRect(0, 0, w, h);
+    ctx.fillStyle = 'black';
+    ctx.fillRect(0, 0, w, h);
+
+    ctx.font = `1.7px monospace`;
+    ctx.fillStyle = 'green';
+    const lines = asciiArt.split('\n');
+    for (let i = 0; i < lines.length; i++) {
+      ctx.fillText(lines[i], 0, i);
+    }
+  }
+
+  initParticlesFilter(frame: ImageData, ctx: CanvasRenderingContext2D) {
+    const w = frame.width;
+    const h = frame.height;
+    this.particlesArray = [];
+
+    for (let i = 0; i < this.numberOfParticles; i++) {
+      this.particlesArray.push(new Particle(w, h, ctx));
+    }
+
+    this.isAnimating = true;
+
+    ctx.globalAlpha = 0.2;
+  }
+
+  startParticlesAnimation(
+    frame: ImageData,
+    ctx: CanvasRenderingContext2D
+  ): void {
+    const w = frame.width;
+    const h = frame.height;
+
+    ctx.fillStyle = 'black';
+    ctx.fillRect(0, 0, w, h);
+
+    if (this.isAnimating) return;
+
+    console.log('Start animating particles');
+    this.initParticlesFilter(frame, ctx);
+    this.animateParticles(frame, ctx);
+  }
+
+  animateParticles(frame: ImageData, ctx: CanvasRenderingContext2D): void {
+    if (!this.isAnimating) return;
+
+    for (let i = 0; i < this.particlesArray.length; i++) {
+      this.particlesArray[i].update();
+      this.particlesArray[i].draw();
+    }
+
+    this.animationId = requestAnimationFrame(() =>
+      this.animateParticles(frame, ctx)
+    );
+  }
+
+  stopParticlesAnimation(ctx: CanvasRenderingContext2D): void {
+    console.log('Stop animating particles');
+    this.isAnimating = false;
+    ctx.globalAlpha = 1;
+    if (this.animationId !== null) {
+      cancelAnimationFrame(this.animationId);
+    }
   }
 }

@@ -12,8 +12,23 @@
     >
     </app-primary-button>
     <app-primary-button
+      label="Warm"
+      (btnClicked)="filterService.changeFilter('warm')"
+    >
+    </app-primary-button>
+    <app-primary-button
+      label="Cool"
+      (btnClicked)="filterService.changeFilter('cool')"
+    >
+    </app-primary-button>
+    <app-primary-button
       label="ASCII"
       (btnClicked)="filterService.changeFilter('ascii')"
+    >
+    </app-primary-button>
+    <app-primary-button
+      label="Particles"
+      (btnClicked)="filterService.changeFilter('particles')"
     >
     </app-primary-button>
   </div>

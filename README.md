@@ -46,4 +46,3 @@ Open your browser and navigate to http://localhost:4200 to see the app in action
 - **Grant Camera Access:** On startup, the app will request access to your webcam. Please allow access in your browser.
 - **Apply Filters:** Use the provided UI controls to switch between different filters (e.g., grayscale, ASCII art).
 - **View Results:** The live video feed will update in real time with the selected filter applied.
-
