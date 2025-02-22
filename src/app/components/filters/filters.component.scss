@@ -4,13 +4,16 @@
 }
 
 .container {
-  display: flex;
-  flex-direction: column;
+  display: inline-flex;
+  justify-content: center;
+  gap: 20px;
   width: 100%;
   min-width: 100%;
+  min-height: 70px;
 }
 
-.buttons {
-  display: inline-flex;
-  width: 100%;
+.container app-primary-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

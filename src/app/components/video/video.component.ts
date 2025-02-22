@@ -5,7 +5,6 @@ import {
   ElementRef,
   inject,
 } from '@angular/core';
-import { PrimaryButtonComponent } from '../primary-button/primary-button.component';
 import { CommonModule } from '@angular/common';
 import { FilterService } from '../../services/filter/filter.service';
 
@@ -13,7 +12,7 @@ import { FilterService } from '../../services/filter/filter.service';
   selector: 'app-video',
   styleUrls: ['./video.component.scss'],
   templateUrl: './video.component.html',
-  imports: [PrimaryButtonComponent, CommonModule],
+  imports: [CommonModule],
 })
 export class VideoComponent implements OnInit {
   @ViewChild('video') videoRef!: ElementRef<HTMLVideoElement>;
@@ -23,7 +22,6 @@ export class VideoComponent implements OnInit {
   isCameraAllowed: boolean = false;
   width: number = 0;
   height: number = 0;
-  first: number = 0;
 
   ngOnInit(): void {
     this.startCamera();

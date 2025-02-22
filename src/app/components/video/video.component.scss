@@ -1,22 +1,29 @@
 :host {
-  display: block;
+  display: flex;
+  flex-direction: column;
   width: 100%;
+  height: 100vh;
 }
 
 .videoContainer {
-  display: inline-flex;
-  width: 100%;
-  gap: 10px;
-  overflow: hidden;
+  flex: 1;
+  display: flex;
+  padding: 20px;
 }
 
-.videoContainer div {
-  flex: 1 1 0;
-  min-width: 0;
+.canvasBox {
+  flex: 1;
+  position: relative;
+  display: flex;
+  justify-content: center;
 }
 
-.videoContainer div video,
-.videoContainer div canvas {
-  width: 100%;
+canvas {
   height: 100%;
+  border-radius: 10px;
+  border: 0.2px solid white;
+}
+
+.videoBox {
+  display: none;
 }

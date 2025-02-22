@@ -30,7 +30,7 @@ export class FilterService {
       const green = data[i + 1];
       const blue = data[i + 2];
 
-      const gray = 0.3 * red + 0.59 * green + 0.11 * blue;
+      const gray = this.calculateRelativeBrightness(red, green, blue);
 
       data[i] = gray;
       data[i + 1] = gray;
@@ -38,6 +38,14 @@ export class FilterService {
     }
 
     ctx.putImageData(frame, 0, 0);
+  }
+
+  private calculateRelativeBrightness(
+    red: number,
+    green: number,
+    blue: number
+  ) {
+    return 0.3 * red + 0.59 * green + 0.11 * blue;
   }
 
   applyWarmFilter(frame: ImageData, ctx: CanvasRenderingContext2D) {
@@ -99,10 +107,26 @@ export class FilterService {
     }
   }
 
-  initParticlesFilter(frame: ImageData, ctx: CanvasRenderingContext2D) {
+  startParticlesAnimation(
+    frame: ImageData,
+    ctx: CanvasRenderingContext2D
+  ): void {
     const w = frame.width;
     const h = frame.height;
-    this.particlesArray = [];
+
+    ctx.fillStyle = 'rgba(0,0,0,0.3)';
+    ctx.fillRect(0, 0, w, h);
+
+    if (this.isAnimating) return;
+
+    console.log('Start animating particles');
+    this.initParticlesFilter(frame, ctx);
+    this.animateParticles(frame, ctx);
+  }
+
+  private initParticlesFilter(frame: ImageData, ctx: CanvasRenderingContext2D) {
+    const w = frame.width;
+    const h = frame.height;
 
     for (let i = 0; i < this.numberOfParticles; i++) {
       this.particlesArray.push(new Particle(w, h, ctx));
@@ -113,24 +137,10 @@ export class FilterService {
     ctx.globalAlpha = 0.2;
   }
 
-  startParticlesAnimation(
+  private animateParticles(
     frame: ImageData,
     ctx: CanvasRenderingContext2D
   ): void {
-    const w = frame.width;
-    const h = frame.height;
-
-    ctx.fillStyle = 'black';
-    ctx.fillRect(0, 0, w, h);
-
-    if (this.isAnimating) return;
-
-    console.log('Start animating particles');
-    this.initParticlesFilter(frame, ctx);
-    this.animateParticles(frame, ctx);
-  }
-
-  animateParticles(frame: ImageData, ctx: CanvasRenderingContext2D): void {
     if (!this.isAnimating) return;
 
     for (let i = 0; i < this.particlesArray.length; i++) {
@@ -146,6 +156,7 @@ export class FilterService {
   stopParticlesAnimation(ctx: CanvasRenderingContext2D): void {
     console.log('Stop animating particles');
     this.isAnimating = false;
+    this.particlesArray = [];
     ctx.globalAlpha = 1;
     if (this.animationId !== null) {
       cancelAnimationFrame(this.animationId);
